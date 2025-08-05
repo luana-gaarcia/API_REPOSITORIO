@@ -14,7 +14,8 @@ app.get('/cadastro',(req,res)=>{
 app.post('/cadastro',(req,res)=>{
     //console.log(req.body)
     usuarios.push(req.body)
-   res.status(201).send('DEU CERTO COM O POST')
+   //res.status(201).send('DEU CERTO COM O POST')
+   res.status(201).json(req.body)
    
 })
 
