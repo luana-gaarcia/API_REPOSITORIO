@@ -17,5 +17,12 @@
   "bugs": {
     "url": "https://github.com/luana-gaarcia/API_REPOSITORIO/issues"
   },
-  "homepage": "https://github.com/luana-gaarcia/API_REPOSITORIO#readme"
+  "homepage": "https://github.com/luana-gaarcia/API_REPOSITORIO#readme",
+  "dependencies": {
+    "@prisma/client": "^6.13.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.13.0"
+  }
 }
