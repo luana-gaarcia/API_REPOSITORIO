@@ -10,12 +10,39 @@ const app = express()
 //indica q vai usar o json
 app.use(express.json())
 
+//CRIANDO ROTAS 
+app.put('/cadastro/:id', async (req, res) =>{
+
+    // console.log(req.params.id)
+    await prisma.usuario.update({
+        where : {
+            id: req.params.id
+    },
+    data:{
+        email: req.body.email,
+        nome: req.body.nome,
+        idade: req.body.idade
+    }
+})
+    res.status(201).json({"message":"Cliente atualizado"})
+})
+    app.delete('/cadastro/:id', async (req, res) =>{
+
+    // console.log(req.params.id)
+    await prisma.usuario.delete({
+        where:{
+         id: req.params.id
+        }
+    }) 
+    res.status(200).json({"message":"Cliente removido"})
+})
+
 // rotas
 app.get('/cadastro', async (req, res) => {
     
-    const listaUsuarios = await prisma.usuario.findMany()
+    const lista_usuarios = await prisma.usuario.findMany()
 
-    res.status(200).json(listaUsuarios)
+    res.status(200).json(lista_usuarios)
 }) //rota get, coloca 'como pega ela', funcao callback (requisicao, reposta)
 
 app.post('/cadastro', async (req, res) => {
