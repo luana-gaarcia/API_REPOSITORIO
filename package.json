@@ -1,7 +1,7 @@
 {
-  "name": "api_repositorio",
+  "name": "api_node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Repositório para aula de SW II - 3BIM",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -9,20 +9,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luana-gaarcia/API_REPOSITORIO.git"
+    "url": "git+https://github.com/raphaelaluvi/API_NODE.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/luana-gaarcia/API_REPOSITORIO/issues"
+    "url": "https://github.com/raphaelaluvi/API_NODE/issues"
   },
-  "homepage": "https://github.com/luana-gaarcia/API_REPOSITORIO#readme",
+  "homepage": "https://github.com/raphaelaluvi/API_NODE#readme",
   "dependencies": {
-    "@prisma/client": "^6.13.0",
-    "express": "^5.1.0"
+    "@prisma/client": "^6.15.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
   },
   "devDependencies": {
-    "prisma": "^6.13.0"
+    "prisma": "^6.15.0"
   }
 }
