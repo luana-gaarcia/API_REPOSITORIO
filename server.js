@@ -1,76 +1,105 @@
 import express from 'express'
 import cors from 'cors'
-
 import pkg from '@prisma/client'
 const { PrismaClient } = pkg
 const prisma = new PrismaClient()
 
-// objeto da biblioteca teste
 const app = express()
+
+// Middlewares
 app.use(express.json())
 app.use(cors())
 
-//indica q vai usar o json
-app.use(express.json())
-
-// rotas
+// GET /cadastro - lista todos os usuários
 app.get('/cadastro', async (req, res) => {
-    
-    const listaUsuarios = await prisma.usuario.findMany()
+  try {
+    const usuarios = await prisma.usuario.findMany()
+    return res.status(200).json(usuarios)
+  } catch (error) {
+    console.error('Erro GET /cadastro:', error)
+    return res.status(500).json({ error: 'Erro ao buscar usuários' })
+  }
+})
 
-    res.status(200).json(listaUsuarios)
-}) //rota get, coloca 'como pega ela', funcao callback (requisicao, reposta)
 
-
+// POST /cadastro - cadastra novo usuário
 app.post('/cadastro', async (req, res) => {
-    //criando
-    await prisma.usuario.create({
-        //um bjeto q esta esperando
-        data:{
-            //campos:
-            email: req.body.email,
-            nome: req.body.nome,
-            idade: req.body.idade
-        }
+  try {
+    const { nome, idade, email } = req.body
+
+    if (!nome || !email) {
+      return res.status(400).json({ error: 'Nome e email são obrigatórios' })
+    }
+    if (idade !== undefined && Number(idade) < 0) {
+  return res.status(400).json({ error: 'Idade não pode ser negativa' })
+    }
+
+
+    const usuarioCriado = await prisma.usuario.create({
+      data: {
+        nome,
+        idade: String(idade),
+        email
+      }
     })
 
-    //res.status(201).send('tudo ok com post')
-    res.status(201).json(req.body)
+    return res.status(201).json(usuarioCriado)
+  } catch (error) {
+    console.error('Erro POST /cadastro:', error)
+    return res.status(500).json({ error: 'Erro ao cadastrar usuário' })
+  }
 })
 
-app.put('/cadastro/:id', async (req, res) => {
-    
-    await prisma.usuario.update({
-        //mostra onde tem q mudar
-        where:{
-            id: req.params.id
-        },
-        data:{
-            email: req.body.email,
-            nome: req.body.nome,
-            idade: req.body.idade
-        }
-    })
-    
-    //pega o parametro id do params
-    //console.log(req.params.id)
-    res.status(201).json({"message":"cliente atualizado"})
-})
-
+// DELETE /cadastro/:id - exclui usuário pelo ID
 app.delete('/cadastro/:id', async (req, res) => {
-    
+  try {
+    const { id } = req.params
+
     await prisma.usuario.delete({
-        //mostra onde tem q mudar
-        where:{
-            id: req.params.id
-        }
+      where: { id }
     })
-    
-    res.status(200).json({"message":"cliente removido"})
+
+    return res.status(200).json({ message: 'Usuário removido' })
+  } catch (error) {
+    console.error('Erro DELETE /cadastro/:id:', error)
+    return res.status(500).json({ error: 'Erro ao excluir usuário' })
+  }
 })
 
-// porta local do servidor
-app.listen(3000, () => {
-    console.log('servidor rodando')
-}) 
-//fica de olho na porta, pode trabalhar com 2 parametros porta, call back
+// PUT /cadastro/:id - atualiza usuário pelo ID
+app.put('/cadastro/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { nome, idade, email } = req.body
+
+    if (!nome || !email) {
+      return res.status(400).json({ error: 'Nome e email são obrigatórios' })
+    }
+
+    if (idade !== undefined && Number(idade) < 0) {
+    return res.status(400).json({ error: 'Idade não pode ser negativa' })
+}
+
+
+    const usuarioAtualizado = await prisma.usuario.update({
+      where: { id },
+      data: {
+        nome,
+        idade: String(idade),
+        email
+      }
+    })
+
+    return res.status(200).json(usuarioAtualizado)
+  } catch (error) {
+    console.error('Erro PUT /cadastro/:id:', error)
+    return res.status(500).json({ error: 'Erro ao atualizar usuário' })
+  }
+})
+
+// Porta do servidor
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`)
+})
+
